@@ -1,0 +1,307 @@
+Step 1. Import the necessary libraries
+import numpy as np      # For numerical operations
+import pandas as pd     # For data manipulation and analysis
+import matplotlib.pyplot as plt  
+
+Step 2. Import the dataset from the AutoMPG dataset file. Assign it to a variable called mpg_df
+
+import pandas as pd
+
+# Assuming the dataset file is in CSV format and named "AutoMPG.csv"
+# Replace 'path_to_dataset' with the actual path to your dataset file.
+# For example: 'C:/Users/your_username/Documents/AutoMPG.csv'
+path_to_dataset = 'AutoMPG.csv'
+
+# Using pandas to read the dataset and store it in a DataFrame called 'mpg_df'
+mpg_df = pd.read_csv(path_to_dataset)
+
+# Now the 'mpg_df' variable contains the dataset, and you can perform various operations on it using pandas.
+# For example, you can check the first few rows of the dataset using the 'head()' method:
+print(mpg_df.head())
+
+Step 3. Perform basic EDA to understand the structure of the data
+
+# Assuming you have already imported the dataset and assigned it to 'mpg_df'
+
+# 1. Display the first few rows of the dataset
+print("First few rows of the dataset:")
+print(mpg_df.head())
+
+# 2. Check the number of rows and columns in the dataset
+num_rows, num_cols = mpg_df.shape
+print("\nNumber of rows:", num_rows)
+print("Number of columns:", num_cols)
+
+# 3. Display the data types of each column
+print("\nData types of columns:")
+print(mpg_df.dtypes)
+
+# 4. Get a summary of the dataset (mean, min, max, etc.)
+print("\nSummary statistics:")
+print(mpg_df.describe())
+
+# 5. Check for any missing values in the dataset
+print("\nMissing values in the dataset:")
+print(mpg_df.isnull().sum())
+
+# 6. Check the unique values in specific columns if needed
+# For example, if you want to see unique values in the 'Origin' column:
+print("\nUnique values in the 'Origin' column:")
+print(mpg_df['Origin'].unique())
+
+Step 4. Check and handle the missing values, if any.
+# Assuming you have already imported the dataset and assigned it to 'mpg_df'
+
+# Step 1: Check for missing values in the dataset
+print("Missing values in the dataset:")
+print(mpg_df.isnull().sum())
+
+# Step 2: Decide on the appropriate method to handle missing values
+# If the missing values are minimal, you might consider filling them with the mean or median.
+# If they are categorical variables, you might fill them with the mode (most frequent value).
+# Alternatively, you can use more sophisticated imputation methods like KNN imputation or regression imputation.
+
+# For example, let's fill the missing values in numeric columns with the mean.
+mpg_df.fillna(mpg_df.mean(), inplace=True)
+
+# If there are categorical columns, you might fill the missing values with the mode:
+# mpg_df['Categorical_Column'].fillna(mpg_df['Categorical_Column'].mode()[0], inplace=True)
+
+# Step 3: Check again if there are any remaining missing values
+print("\nMissing values after handling:")
+print(mpg_df.isnull().sum())
+
+# Note: Be cautious about the imputation method you choose, as it can influence the results of your analysis.
+# In some cases, dropping rows with missing values might be a better option, but it depends on the dataset and the problem you are trying to solve.
+# Also, be sure to handle missing values separately for training and testing datasets if you plan to use machine learning models.
+
+Step 5. Create a plot to check the relationship between horsepower and acceleration. Note down your insight for the same. Beautify the graph using various customizations.
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming you have already imported the dataset and assigned it to 'mpg_df'
+# Let's drop any rows with missing values in 'Horsepower' and 'Acceleration' columns
+mpg_df.dropna(subset=['Horsepower', 'Acceleration'], inplace=True)
+
+# Step 1: Create a scatter plot for 'Horsepower' vs. 'Acceleration'
+plt.figure(figsize=(10, 6))  # Set the size of the plot (width, height)
+
+# Use the 'Horsepower' column as the x-axis and 'Acceleration' column as the y-axis
+plt.scatter(mpg_df['Horsepower'], mpg_df['Acceleration'], c='blue', marker='o', alpha=0.7, edgecolors='k')
+
+# Step 2: Add labels and a title
+plt.xlabel('Horsepower', fontsize=14)
+plt.ylabel('Acceleration', fontsize=14)
+plt.title('Horsepower vs. Acceleration', fontsize=16)
+
+# Step 3: Add gridlines for better readability
+plt.grid(True, linestyle='--', alpha=0.5)
+
+# Step 4: Add a trend line (optional)
+import numpy as np
+fit = np.polyfit(mpg_df['Horsepower'], mpg_df['Acceleration'], 1)
+plt.plot(mpg_df['Horsepower'], fit[0] * mpg_df['Horsepower'] + fit[1], color='red', linewidth=2)
+
+# Step 5: Customize the plot appearance
+plt.tick_params(axis='both', which='major', labelsize=12)
+plt.legend(['Trend Line'], loc='upper right', fontsize=12)
+
+# Step 6: Show the plot
+plt.tight_layout()  # Ensures the plot is displayed properly
+plt.show()
+
+Step 6. Generate subplots to display the histograms for acceleration, displacement and weight and kilometer_per_litre. Note down your insight for the same
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming you have already imported the dataset and assigned it to 'mpg_df'
+# Let's drop any rows with missing values in these columns
+mpg_df.dropna(subset=['Acceleration', 'Displacement', 'Weight', 'Kilometer_per_litre'], inplace=True)
+
+# Step 1: Create subplots
+fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(12, 8))
+# The 'fig' is the entire figure, and 'axes' is a 2x2 array containing the four subplots
+
+# Step 2: Plot histograms
+# Subplot 1: Acceleration
+axes[0, 0].hist(mpg_df['Acceleration'], bins=15, edgecolor='black', color='skyblue')
+axes[0, 0].set_title('Acceleration', fontsize=14)
+
+# Subplot 2: Displacement
+axes[0, 1].hist(mpg_df['Displacement'], bins=15, edgecolor='black', color='lightgreen')
+axes[0, 1].set_title('Displacement', fontsize=14)
+
+# Subplot 3: Weight
+axes[1, 0].hist(mpg_df['Weight'], bins=15, edgecolor='black', color='lightcoral')
+axes[1, 0].set_title('Weight', fontsize=14)
+
+# Subplot 4: Kilometer_per_litre
+axes[1, 1].hist(mpg_df['Kilometer_per_litre'], bins=15, edgecolor='black', color='gold')
+axes[1, 1].set_title('Kilometer_per_litre', fontsize=14)
+
+# Step 3: Add labels and a title for the entire figure
+fig.suptitle('Histograms for Selected Columns', fontsize=16)
+
+# Step 4: Customize the subplots appearance
+for ax in axes.flat:
+    ax.set_xlabel('Value', fontsize=12)
+    ax.set_ylabel('Frequency', fontsize=12)
+    ax.grid(True, linestyle='--', alpha=0.5)
+
+# Step 5: Adjust layout to prevent overlapping of titles and labels
+plt.tight_layout()
+
+# Step 6: Show the plot
+plt.show()
+
+Step 7. Create a plot to check the relationship between displacement and weight for origin 2, color the datapoints based on no of cylinders. Note down your insight for the same and save the plot as an image file.
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming you have already imported the dataset and assigned it to 'mpg_df'
+# Let's filter the data for cars with 'Origin' equal to 2
+origin_2_df = mpg_df[mpg_df['Origin'] == 2]
+
+# Step 1: Create a scatter plot for 'Displacement' vs. 'Weight'
+plt.figure(figsize=(10, 6))  # Set the size of the plot (width, height)
+
+# Use the 'Displacement' column as the x-axis and 'Weight' column as the y-axis
+# Color the data points based on the number of cylinders ('Cylinders' column)
+cylinder_colors = {3: 'red', 4: 'green', 5: 'blue', 6: 'purple', 8: 'orange'}
+for cylinder, color in cylinder_colors.items():
+    plt.scatter(
+        origin_2_df[origin_2_df['Cylinders'] == cylinder]['Displacement'],
+        origin_2_df[origin_2_df['Cylinders'] == cylinder]['Weight'],
+        label=f'{cylinder} Cylinders',
+        c=color,
+        marker='o',
+        alpha=0.7,
+        edgecolors='k'
+    )
+
+# Step 2: Add labels and a title
+plt.xlabel('Displacement', fontsize=14)
+plt.ylabel('Weight', fontsize=14)
+plt.title('Displacement vs. Weight for Cars with Origin 2', fontsize=16)
+
+# Step 3: Customize the plot appearance
+plt.grid(True, linestyle='--', alpha=0.5)
+plt.legend(loc='upper left', fontsize=12)
+
+# Step 4: Save the plot as an image file (e.g., PNG or PDF)
+plt.savefig('Displacement_vs_Weight.png', dpi=300, bbox_inches='tight')
+
+# Step 5: Show the plot
+plt.tight_layout()
+plt.show()
+
+Step 8. Display the frequency distribution of the Origin variable. Note down your insight for the same
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming you have already imported the dataset and assigned it to 'mpg_df'
+
+# Step 1: Get the frequency distribution of the 'Origin' variable
+origin_counts = mpg_df['Origin'].value_counts()
+
+# Step 2: Create a bar plot to visualize the frequency distribution
+plt.figure(figsize=(8, 6))  # Set the size of the plot (width, height)
+plt.bar(origin_counts.index, origin_counts.values, color='skyblue', edgecolor='black', alpha=0.7)
+
+# Step 3: Add labels and a title
+plt.xlabel('Origin', fontsize=14)
+plt.ylabel('Frequency', fontsize=14)
+plt.title('Frequency Distribution of Origin', fontsize=16)
+
+# Step 4: Customize the plot appearance
+plt.grid(axis='y', linestyle='--', alpha=0.5)
+
+# Step 5: Show the plot
+plt.tight_layout()
+plt.show()
+
+Step 9. Check the relationship of multiple variables wrt kilometer_per_litre. Note down your insight for the same
+
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Assuming you have already imported the dataset and assigned it to 'mpg_df'
+
+# Step 1: Select numerical columns for the pair plot
+numerical_columns = ['Kilometer_per_litre', 'Acceleration', 'Displacement', 'Horsepower', 'Weight']
+
+# Step 2: Create pair plots using seaborn
+sns.set(style='ticks')
+sns.pairplot(mpg_df[numerical_columns], diag_kind='kde', markers='o', hue='Kilometer_per_litre', palette='coolwarm')
+
+# Step 3: Customize the plot appearance
+plt.suptitle('Pair Plot of Numerical Variables vs. Kilometer_per_litre', y=1.02, fontsize=16)
+
+# Step 4: Show the plot
+plt.tight_layout()
+plt.show()
+
+Step 10. Display the average weight based on no of cylinders present. Note down the insight for the same
+
+import pandas as pd
+
+# Assuming you have already imported the dataset and assigned it to 'mpg_df'
+
+# Step 1: Group the data by 'Cylinders' and calculate the average weight for each group
+average_weight_by_cylinders = mpg_df.groupby('Cylinders')['Weight'].mean()
+
+# Step 2: Display the average weight based on the number of cylinders
+print("Average Weight based on Number of Cylinders:")
+print(average_weight_by_cylinders)
+
+Step 11. Check for the outliers in the dataset. Note down the insight for the same.
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming you have already imported the dataset and assigned it to 'mpg_df'
+
+# Step 1: Select numerical columns for which we want to check outliers
+numerical_columns = ['Acceleration', 'Displacement', 'Horsepower', 'Weight', 'Kilometer_per_litre']
+
+# Step 2: Create box plots for each numerical column to visualize the distribution and identify outliers
+plt.figure(figsize=(10, 6))  # Set the size of the plot (width, height)
+mpg_df[numerical_columns].boxplot(patch_artist=True, sym='k.', notch=True, vert=False)
+plt.title('Box Plots for Numerical Variables', fontsize=16)
+plt.xlabel('Value', fontsize=14)
+plt.ylabel('Variables', fontsize=14)
+
+# Step 3: Show the plot
+plt.tight_layout()
+plt.show()
+
+Step 12. Plot the correlations for variables.
+
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Assuming you have already imported the dataset and assigned it to 'mpg_df'
+
+# Step 1: Select numerical columns for which we want to calculate correlations
+numerical_columns = ['Acceleration', 'Displacement', 'Horsepower', 'Weight', 'Kilometer_per_litre']
+
+# Step 2: Calculate the correlation matrix
+correlation_matrix = mpg_df[numerical_columns].corr()
+
+# Step 3: Create a heatmap to visualize the correlations
+plt.figure(figsize=(10, 8))  # Set the size of the plot (width, height)
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f', linewidths=0.5)
+
+# Step 4: Add labels and a title
+plt.title('Correlation Matrix of Numerical Variables', fontsize=16)
+
+# Step 5: Show the plot
+plt.tight_layout()
+plt.show()
+
